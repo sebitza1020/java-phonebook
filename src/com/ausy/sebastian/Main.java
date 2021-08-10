@@ -1,5 +1,7 @@
 package com.ausy.sebastian;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
@@ -25,7 +27,7 @@ public class Main {
                 case 3: //Completed
                     phoneBook.findContactByPhoneNumber();
                     break;
-                case 4: //Almost there
+                case 4: //Completed
                     phoneBook.findContactByName();
                     break;
                 default:

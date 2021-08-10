@@ -1,5 +1,7 @@
 package com.ausy.sebastian;
 
+import java.util.List;
+
 public interface PhoneBook {
     void printMenu();
 
@@ -12,4 +14,6 @@ public interface PhoneBook {
     void getAllContacts();
 
     void findContactByName();
+
+    int getAllContactsFromDB();
 }
