@@ -1,5 +1,8 @@
 package com.ausy.sebastian;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,14 +10,17 @@ import java.util.regex.Pattern;
 
 public class PhoneBookImpl implements PhoneBook {
     Scanner sc = new Scanner(System.in);
+    DB db_conn = new DB();
+    Connection connection = db_conn.get_Connection();
     List<Contact> contacts = new ArrayList<>();
     Pattern phonePattern = Pattern.compile("^07[1-9][0-9]\\s\\d{3}\\s\\d{3}$");
     Pattern namePattern = Pattern.compile("^[A-Za-z]$");
     String phoneNumber;
+    int ct = getAllContactsFromDB();
 
     public void printMenu() {
         System.out.println("Phone Book");
-        System.out.println("There are currently " + contacts.size() + " contacts in the phone book.\n");
+        System.out.println("There are currently " + ct + " contacts in the phone book.\n");
         System.out.println(" 1. Add or edit a contact.");
         System.out.println(" 2. View all contacts.");
         System.out.println(" 3. Find a contact by phone number.");
@@ -32,7 +38,7 @@ public class PhoneBookImpl implements PhoneBook {
         } while (phoneNumber.isEmpty() || !phonePattern.matcher(phoneNumber).matches());
 
         if (phonePattern.matcher(phoneNumber).matches()) {
-            if (contacts.size() == 0) {
+            if (ct == 0) {
                 addContact(phoneNumber);
                 return;
             }
@@ -61,6 +67,20 @@ public class PhoneBookImpl implements PhoneBook {
                     System.out.print("Address: ");
                     String address = sc.nextLine();
                     contact.setAddress(address);
+
+                    PreparedStatement ps;
+                    try {
+                        String query = "UPDATE contact SET first_name=?,last_name=?,email=?,address=? WHERE phone_number=?;";
+                        ps = connection.prepareStatement(query);
+                        ps.setString(1, contact.getFirstName());
+                        ps.setString(2, contact.getLastName());
+                        ps.setString(3, contact.getEmail());
+                        ps.setString(4, contact.getAddress());
+                        ps.setString(5, contact.getPhoneNumber());
+                        ps.executeUpdate();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
 
                     System.out.println("\nPhone book was updated successfully.\n");
                     System.out.println("Press ENTER to continue.");
@@ -93,7 +113,19 @@ public class PhoneBookImpl implements PhoneBook {
         System.out.print("Address: ");
         String address = sc.nextLine();
 
-        contacts.add(new Contact(phoneNumber, firstName, lastName, email, address));
+        PreparedStatement ps;
+        try {
+            String query = "INSERT INTO contact(phone_number,first_name,last_name,email,address) VALUES (?,?,?,?,?);";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, phoneNumber);
+            ps.setString(2, firstName);
+            ps.setString(3, lastName);
+            ps.setString(4, email);
+            ps.setString(5, address);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println("Phone book was updated successfully.\n");
         System.out.println("Press ENTER to continue.");
@@ -109,34 +141,50 @@ public class PhoneBookImpl implements PhoneBook {
         } while (phoneNumber.isEmpty() || !phonePattern.matcher(phoneNumber).matches());
 
         if (phonePattern.matcher(phoneNumber).matches()) {
-            for (Contact contact : contacts) {
-                if (contact.getPhoneNumber().equals(phoneNumber)) {
-                    System.out.printf("%-20s%-50s %n", "Phone number:", contact.getPhoneNumber());
-                    System.out.printf("%-20s%-50s %n", "First name:", contact.getFirstName());
-                    System.out.printf("%-20s%-50s %n", "Last name:", contact.getLastName());
-                    System.out.printf("%-20s%-50s %n", "E-mail:", contact.getEmail());
-                    System.out.printf("%-20s%-50s %n", "Address:", contact.getAddress());
+            PreparedStatement ps;
+            ResultSet rs;
+
+            try {
+                String query = "SELECT * FROM contact WHERE phone_number=?;";
+                ps = connection.prepareStatement(query);
+                ps.setString(1, phoneNumber);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    System.out.printf("%-20s%-50s %n", "Phone number:", rs.getString("phone_number"));
+                    System.out.printf("%-20s%-50s %n", "First name:", rs.getString("first_name"));
+                    System.out.printf("%-20s%-50s %n", "Last name:", rs.getString("last_name"));
+                    System.out.printf("%-20s%-50s %n", "E-mail:", rs.getString("email"));
+                    System.out.printf("%-20s%-50s %n", "Address:", rs.getString("address"));
                     System.out.println("Press ENTER to continue.");
                     sc.nextLine();
-                    return;
                 }
+
+            } catch (Exception e) {
+                System.out.println("The phone number could not be found in the address book.\n");
+                System.out.println("Press ENTER to continue.");
+                sc.nextLine();
             }
-            System.out.println("The phone number could not be found in the address book.\n");
-            System.out.println("Press ENTER to continue.");
-            sc.nextLine();
         }
     }
 
     public void getAllContacts() {
-//        contacts.add(new Contact("0712 345 678", "John", "Smith", "john.smith@example.com", "Bd. Regelui, nr. 1, Bucuresti"));
-//        contacts.add(new Contact("0721 435 764", "John", "Doe", "john.doe@example.com", "Str. Geniului, nr. 77, Cluj-Napoca"));
-//        contacts.add(new Contact("0741 826 314", "Jane", "Doe", "jane.doe@example.com", "Str. Moldovei, nr. 21, Sibiu"));
 
         System.out.println("Contact list\n");
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            String query = "SELECT * FROM contact;";
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
 
-        for (Contact contact : contacts) {
-            System.out.printf("%-16s%-5s%-8s%-25s %n", contact.getPhoneNumber(), contact.getFirstName(),
-                    contact.getLastName(), contact.getEmail());
+            while (rs.next()) {
+                System.out.printf("%-16s%-5s%-8s%-25s %n", rs.getString(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
         System.out.println("\nPress ENTER to continue.");
@@ -176,5 +224,26 @@ public class PhoneBookImpl implements PhoneBook {
 
         System.out.println("\nPress ENTER to continue.");
         sc.nextLine();
+    }
+
+    public int getAllContactsFromDB() {
+        int count = 0;
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            String query = "SELECT * FROM contact;";
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                contacts.add(new Contact(rs.getString(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5)));
+                count++;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return count;
     }
 }
