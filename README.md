@@ -21,6 +21,8 @@ and searching by first name, last name or first and last name together. If it wa
 Initially, it was supposed to take 8 hours/2 days(4h/1d for 2 options), but after I have done 2 options in less than 2 hours, I had enough time to finish other 2 options in
 3 hours and now I have tested the program, everything works great according to requirements.
 
+As a plus, I have integrated MySQL to save, retrieve or update data.
+
 You can take a look at the program above now.
 
 <h3>Mentions: </h3>
