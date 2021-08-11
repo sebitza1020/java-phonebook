@@ -1,4 +1,4 @@
-package com.ausy.sebastian;
+package com.ausy.sebastian.model;
 
 public class Contact {
     private final String phoneNumber;

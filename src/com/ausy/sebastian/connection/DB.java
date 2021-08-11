@@ -1,4 +1,4 @@
-package com.ausy.sebastian;
+package com.ausy.sebastian.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

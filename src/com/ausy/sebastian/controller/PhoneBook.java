@@ -1,4 +1,4 @@
-package com.ausy.sebastian;
+package com.ausy.sebastian.controller;
 
 
 public interface PhoneBook {
