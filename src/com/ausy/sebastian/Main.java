@@ -7,11 +7,11 @@ import java.util.Scanner;
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
-    static PhoneBook phoneBook = new PhoneBookImpl();
 
     public static void main(String[] args) {
 
         while (true) {
+            PhoneBook phoneBook = new PhoneBookImpl();
             int select;
             phoneBook.printMenu();
             select = sc.nextInt();
