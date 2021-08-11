@@ -1,5 +1,8 @@
 package com.ausy.sebastian;
 
+import com.ausy.sebastian.controller.PhoneBook;
+import com.ausy.sebastian.controller.PhoneBookController;
+
 import java.util.Scanner;
 
 public class Main {
@@ -9,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         while (true) {
-            PhoneBook phoneBook = new PhoneBookImpl();
+            PhoneBook phoneBook = new PhoneBookController();
             int select;
             phoneBook.printMenu();
             select = sc.nextInt();

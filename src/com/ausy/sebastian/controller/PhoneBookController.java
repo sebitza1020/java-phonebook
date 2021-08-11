@@ -1,4 +1,7 @@
-package com.ausy.sebastian;
+package com.ausy.sebastian.controller;
+
+import com.ausy.sebastian.connection.DB;
+import com.ausy.sebastian.model.Contact;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class PhoneBookImpl implements PhoneBook {
+public class PhoneBookController implements PhoneBook {
     Scanner sc = new Scanner(System.in);
     DB db_conn = new DB();
     Connection connection = db_conn.get_Connection();
@@ -127,7 +130,7 @@ public class PhoneBookImpl implements PhoneBook {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("Phone book was updated successfully.\n");
+        System.out.println("\nPhone book was updated successfully.\n");
         System.out.println("Press ENTER to continue.");
         sc.nextLine();
     }
@@ -161,10 +164,11 @@ public class PhoneBookImpl implements PhoneBook {
                 }
 
             } catch (Exception e) {
-                System.out.println("The phone number could not be found in the address book.\n");
-                System.out.println("Press ENTER to continue.");
-                sc.nextLine();
+                System.out.println(e.getMessage());
             }
+            System.out.println("\nThe phone number could not be found in the address book.\n");
+            System.out.println("Press ENTER to continue.");
+            sc.nextLine();
         }
     }
 
