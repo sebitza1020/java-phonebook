@@ -1,6 +1,5 @@
 package com.ausy.sebastian;
 
-import java.util.List;
 
 public interface PhoneBook {
     void printMenu();
