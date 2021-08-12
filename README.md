@@ -19,9 +19,9 @@ A select entry was required to use the switch statement, and from 1 to 4, I had 
 and searching by first name, last name or first and last name together. If it was anything other than 1-4, then I was out of the program.
 
 Initially, it was supposed to take 8 hours/2 days(4h/1d for 2 options), but after I have done 2 options in less than 2 hours, I had enough time to finish other 2 options in
-3 hours and now I have tested the program, everything works great according to requirements, plus 6 more hours on implementing databases.
+3 hours and now I have tested the program, everything works great according to requirements, plus 6 more hours on implementing databases, plus 3 more hours on doing test scenarios using JUnit for both Contact and PhoneBookController.
 
-As a plus, I have integrated MySQL to save, retrieve or update data.
+As a plus, I have integrated MySQL to save, retrieve or update data, and done test scenarios.
 
 You can take a look at the program above now.
 
