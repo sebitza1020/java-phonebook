@@ -3,6 +3,7 @@ package com.ausy.sebastian.controller;
 import com.ausy.sebastian.connection.DB;
 import com.ausy.sebastian.model.Contact;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +14,7 @@ import java.util.List;
 
 class PhoneBookControllerTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addEditPhoneNumber() {
         List<Contact> contacts = new ArrayList<>();
         contacts.add(new Contact("0712 345 678", "John", "Smith", "john.smith@example.com",
@@ -29,7 +30,7 @@ class PhoneBookControllerTest {
         Assertions.assertEquals("Doe", contacts.get(0).getLastName());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addContact() {
         List<Contact> contacts = new ArrayList<>();
         contacts.add(new Contact("0712 345 678", "John", "Smith", "john.smith@example.com",
@@ -39,7 +40,7 @@ class PhoneBookControllerTest {
         Assertions.assertEquals(1, contacts.size());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void findContactByPhoneNumber() {
         List<Contact> contacts = new ArrayList<>();
         contacts.add(new Contact("0712 345 678", "John", "Smith", "john.smith@example.com",
@@ -59,7 +60,7 @@ class PhoneBookControllerTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
         contacts.add(new Contact("0712 345 678", "John", "Smith", "john.smith@example.com",
@@ -76,7 +77,7 @@ class PhoneBookControllerTest {
         Assertions.assertEquals(3, contacts.size());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void findContactByName() {
         List<Contact> foundContacts = new ArrayList<>();
         String name = "smIth jO";
@@ -95,7 +96,7 @@ class PhoneBookControllerTest {
         Assertions.assertEquals(foundContacts.size(), contacts.size());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAllContactsFromDB() {
         DB db_conn = new DB();
         Connection connection = db_conn.get_Connection();
