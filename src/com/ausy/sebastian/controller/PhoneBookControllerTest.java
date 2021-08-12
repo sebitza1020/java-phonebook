@@ -118,6 +118,6 @@ class PhoneBookControllerTest {
         }
 
         Assertions.assertFalse(contacts.isEmpty());
-        Assertions.assertEquals(3, contacts.size());
+        Assertions.assertEquals(4, contacts.size());
     }
 }

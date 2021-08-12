@@ -153,7 +153,7 @@ public class PhoneBookController implements PhoneBook {
                 ps.setString(1, phoneNumber);
                 rs = ps.executeQuery();
 
-                while (rs.next()) {
+                if (rs.next()) {
                     System.out.printf("%-20s%-50s %n", "Phone number:", rs.getString("phone_number"));
                     System.out.printf("%-20s%-50s %n", "First name:", rs.getString("first_name"));
                     System.out.printf("%-20s%-50s %n", "Last name:", rs.getString("last_name"));
@@ -161,6 +161,7 @@ public class PhoneBookController implements PhoneBook {
                     System.out.printf("%-20s%-50s %n", "Address:", rs.getString("address"));
                     System.out.println("Press ENTER to continue.");
                     sc.nextLine();
+                    return;
                 }
 
             } catch (Exception e) {
