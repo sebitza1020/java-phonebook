@@ -100,7 +100,6 @@ class PhoneBookControllerTest {
         DB db_conn = new DB();
         Connection connection = db_conn.get_Connection();
         List<Contact> contacts = new ArrayList<>();
-        int count = 0;
         PreparedStatement ps;
         ResultSet rs;
         try {
@@ -111,7 +110,6 @@ class PhoneBookControllerTest {
             while (rs.next()) {
                 contacts.add(new Contact(rs.getString(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5)));
-                count++;
             }
 
         } catch (Exception e) {
