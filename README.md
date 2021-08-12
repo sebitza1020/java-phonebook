@@ -23,7 +23,12 @@ Initially, it was supposed to take 8 hours/2 days(4h/1d for 2 options), but afte
 
 As a plus, I have integrated MySQL to save, retrieve or update data, and done test scenarios.
 
-You can take a look at the program above now.
+You can take a look at the program above now, or you can watch this video by clicking it below.
+
+
+https://user-images.githubusercontent.com/61789114/129201012-59159792-ea59-4ccf-b9b6-4f7313351b1a.mp4
+
+
 
 <h3>Mentions: </h3>
   Romanian phone pattern (w/o international preffix +40): ^07[1-9][0-9]\s\d{3}\s\d{3}$
