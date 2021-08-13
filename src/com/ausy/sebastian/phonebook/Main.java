@@ -20,16 +20,16 @@ public class Main {
             sc.nextLine();
 
             switch (select) {
-                case 1: // Completed
+                case 1:
                     phoneBook.addEditPhoneNumber();
                     break;
-                case 2: //Completed
+                case 2:
                     phoneBook.getAllContacts();
                     break;
-                case 3: //Completed
+                case 3:
                     phoneBook.findContactByPhoneNumber();
                     break;
-                case 4: //Completed
+                case 4:
                     phoneBook.findContactByName();
                     break;
                 default:
