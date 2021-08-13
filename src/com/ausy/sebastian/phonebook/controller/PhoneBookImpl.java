@@ -1,8 +1,10 @@
-package com.ausy.sebastian.controller;
+package com.ausy.sebastian.phonebook.controller;
 
-import com.ausy.sebastian.connection.DB;
-import com.ausy.sebastian.model.Contact;
+import com.ausy.sebastian.phonebook.connection.Db;
+import com.ausy.sebastian.phonebook.model.Contact;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,19 +13,31 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class PhoneBookController implements PhoneBook {
-    Scanner sc = new Scanner(System.in);
-    DB db_conn = new DB();
-    Connection connection = db_conn.get_Connection();
+/**
+ * This class is used to implement the interface's methods.
+ */
+public class PhoneBookImpl implements PhoneBook {
+    Scanner scanner = new Scanner(System.in);
+    Db dbConn = Db.getInstance();
+    Method method = dbConn.getClass().getDeclaredMethod("getConnection");
     List<Contact> contacts = new ArrayList<>();
     Pattern phonePattern = Pattern.compile("^07[1-9][0-9]\\s\\d{3}\\s\\d{3}$");
     Pattern namePattern = Pattern.compile("^[A-Za-z]$");
     String phoneNumber;
-    int ct = getAllContactsFromDB();
+    int count = getAllContactsFromDB();
+
+    /**
+     * This class is used to implement the interface's methods.
+     * @throws NoSuchMethodException when a particular method cannot be found.
+     * @throws InvocationTargetException a checked exception that wraps an exception thrown by an invoked method or constructor.
+     * @throws IllegalAccessException when an application tries to reflectively create an instance (other than an array), set or get a field, or invoke a method, but the currently executing method does not have access to the definition of the specified class, field, method or constructor.
+     */
+    public PhoneBookImpl() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    }
 
     public void printMenu() {
         System.out.println("Phone Book");
-        System.out.println("There are currently " + ct + " contacts in the phone book.\n");
+        System.out.println("There are currently " + count + " contacts in the phone book.\n");
         System.out.println(" 1. Add or edit a contact.");
         System.out.println(" 2. View all contacts.");
         System.out.println(" 3. Find a contact by phone number.");
@@ -32,16 +46,16 @@ public class PhoneBookController implements PhoneBook {
         System.out.print("\nSelect an option: ");
     }
 
-    public void addEditPhoneNumber() {
+    public void addEditPhoneNumber() throws InvocationTargetException, IllegalAccessException {
         System.out.println("Add/edit a contact\n");
 
         do {
             System.out.print("Enter a phone number: ");
-            phoneNumber = sc.nextLine();
+            phoneNumber = scanner.nextLine();
         } while (phoneNumber.isEmpty() || !phonePattern.matcher(phoneNumber).matches());
 
         if (phonePattern.matcher(phoneNumber).matches()) {
-            if (ct == 0) {
+            if (count == 0) {
                 addContact(phoneNumber);
                 return;
             }
@@ -52,26 +66,28 @@ public class PhoneBookController implements PhoneBook {
                     String firstName;
                     do {
                         System.out.print("First Name: ");
-                        firstName = sc.nextLine();
+                        firstName = scanner.nextLine();
                     } while (firstName.isEmpty() || namePattern.matcher(firstName).matches());
                     contact.setFirstName(firstName);
 
                     String lastName;
                     do {
                         System.out.print("Last Name: ");
-                        lastName = sc.nextLine();
+                        lastName = scanner.nextLine();
                     } while (lastName.isEmpty() || namePattern.matcher(lastName).matches());
                     contact.setLastName(lastName);
 
                     System.out.print("Email: ");
-                    String email = sc.nextLine();
+                    String email = scanner.nextLine();
                     contact.setEmail(email);
 
                     System.out.print("Address: ");
-                    String address = sc.nextLine();
+                    String address = scanner.nextLine();
                     contact.setAddress(address);
 
                     PreparedStatement ps;
+                    method.setAccessible(true);
+                    Connection connection = (Connection) method.invoke(dbConn);
                     try {
                         String query = "UPDATE contact SET first_name=?,last_name=?,email=?,address=? WHERE phone_number=?;";
                         ps = connection.prepareStatement(query);
@@ -87,7 +103,7 @@ public class PhoneBookController implements PhoneBook {
 
                     System.out.println("\nPhone book was updated successfully.\n");
                     System.out.println("Press ENTER to continue.");
-                    sc.nextLine();
+                    scanner.nextLine();
                     return;
                 }
             }
@@ -95,28 +111,30 @@ public class PhoneBookController implements PhoneBook {
         }
     }
 
-    public void addContact(String phoneNumber) {
+    public void addContact(String phoneNumber) throws InvocationTargetException, IllegalAccessException {
         System.out.println("This phone number is new. Adding a new entry to the phone book.");
 
         String firstName;
         do {
             System.out.print("First Name: ");
-            firstName = sc.nextLine();
+            firstName = scanner.nextLine();
         } while (firstName.isEmpty() || namePattern.matcher(firstName).matches());
 
         String lastName;
         do {
             System.out.print("Last Name: ");
-            lastName = sc.nextLine();
+            lastName = scanner.nextLine();
         } while (lastName.isEmpty() || namePattern.matcher(lastName).matches());
 
         System.out.print("Email: ");
-        String email = sc.nextLine();
+        String email = scanner.nextLine();
 
         System.out.print("Address: ");
-        String address = sc.nextLine();
+        String address = scanner.nextLine();
 
         PreparedStatement ps;
+        method.setAccessible(true);
+        Connection connection = (Connection) method.invoke(dbConn);
         try {
             String query = "INSERT INTO contact(phone_number,first_name,last_name,email,address) VALUES (?,?,?,?,?);";
             ps = connection.prepareStatement(query);
@@ -132,20 +150,22 @@ public class PhoneBookController implements PhoneBook {
 
         System.out.println("\nPhone book was updated successfully.\n");
         System.out.println("Press ENTER to continue.");
-        sc.nextLine();
+        scanner.nextLine();
     }
 
-    public void findContactByPhoneNumber() {
+    public void findContactByPhoneNumber() throws InvocationTargetException, IllegalAccessException {
         System.out.println("Search by phone number\n");
 
         do {
             System.out.print("Enter a phone number: ");
-            phoneNumber = sc.nextLine();
+            phoneNumber = scanner.nextLine();
         } while (phoneNumber.isEmpty() || !phonePattern.matcher(phoneNumber).matches());
 
         if (phonePattern.matcher(phoneNumber).matches()) {
             PreparedStatement ps;
             ResultSet rs;
+            method.setAccessible(true);
+            Connection connection = (Connection) method.invoke(dbConn);
 
             try {
                 String query = "SELECT * FROM contact WHERE phone_number=?;";
@@ -160,7 +180,7 @@ public class PhoneBookController implements PhoneBook {
                     System.out.printf("%-20s%-50s %n", "E-mail:", rs.getString("email"));
                     System.out.printf("%-20s%-50s %n", "Address:", rs.getString("address"));
                     System.out.println("Press ENTER to continue.");
-                    sc.nextLine();
+                    scanner.nextLine();
                     return;
                 }
 
@@ -169,15 +189,17 @@ public class PhoneBookController implements PhoneBook {
             }
             System.out.println("\nThe phone number could not be found in the address book.\n");
             System.out.println("Press ENTER to continue.");
-            sc.nextLine();
+            scanner.nextLine();
         }
     }
 
-    public void getAllContacts() {
+    public void getAllContacts() throws InvocationTargetException, IllegalAccessException {
 
         System.out.println("Contact list\n");
         PreparedStatement ps;
         ResultSet rs;
+        method.setAccessible(true);
+        Connection connection = (Connection) method.invoke(dbConn);
         try {
             String query = "SELECT * FROM contact;";
             ps = connection.prepareStatement(query);
@@ -193,7 +215,7 @@ public class PhoneBookController implements PhoneBook {
         }
 
         System.out.println("\nPress ENTER to continue.");
-        sc.nextLine();
+        scanner.nextLine();
     }
 
     public void findContactByName() {
@@ -203,7 +225,7 @@ public class PhoneBookController implements PhoneBook {
         String name;
         do {
             System.out.print("Enter a name (first name, last name or both): ");
-            name = sc.nextLine();
+            name = scanner.nextLine();
         } while (name.isEmpty() || namePattern.matcher(name).matches());
 
         for (Contact contact : contacts) {
@@ -218,7 +240,7 @@ public class PhoneBookController implements PhoneBook {
         if (foundContacts.isEmpty()) {
             System.out.println("\nNo results.");
             System.out.println("\nPress ENTER to continue.");
-            sc.nextLine();
+            scanner.nextLine();
             return;
         }
 
@@ -228,13 +250,15 @@ public class PhoneBookController implements PhoneBook {
         }
 
         System.out.println("\nPress ENTER to continue.");
-        sc.nextLine();
+        scanner.nextLine();
     }
 
-    public int getAllContactsFromDB() {
+    public int getAllContactsFromDB() throws InvocationTargetException, IllegalAccessException {
         int count = 0;
         PreparedStatement ps;
         ResultSet rs;
+        method.setAccessible(true);
+        Connection connection = (Connection) method.invoke(dbConn);
         try {
             String query = "SELECT * FROM contact;";
             ps = connection.prepareStatement(query);

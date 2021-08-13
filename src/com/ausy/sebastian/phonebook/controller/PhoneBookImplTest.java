@@ -1,10 +1,12 @@
-package com.ausy.sebastian.controller;
+package com.ausy.sebastian.phonebook.controller;
 
-import com.ausy.sebastian.connection.DB;
-import com.ausy.sebastian.model.Contact;
+import com.ausy.sebastian.phonebook.connection.Db;
+import com.ausy.sebastian.phonebook.model.Contact;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class PhoneBookControllerTest {
+class PhoneBookImplTest {
 
     @Test
     void addEditPhoneNumber() {
@@ -97,12 +99,14 @@ class PhoneBookControllerTest {
     }
 
     @Test
-    void getAllContactsFromDB() {
-        DB db_conn = new DB();
-        Connection connection = db_conn.get_Connection();
+    void getAllContactsFromDB() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Db db_conn = Db.getInstance();
+        Method method = db_conn.getClass().getDeclaredMethod("getConnection");
         List<Contact> contacts = new ArrayList<>();
         PreparedStatement ps;
         ResultSet rs;
+        method.setAccessible(true);
+        Connection connection = (Connection) method.invoke(db_conn);
         try {
             String query = "SELECT * FROM contact;";
             ps = connection.prepareStatement(query);
@@ -118,6 +122,6 @@ class PhoneBookControllerTest {
         }
 
         Assertions.assertFalse(contacts.isEmpty());
-        Assertions.assertEquals(4, contacts.size());
+        Assertions.assertEquals(3, contacts.size());
     }
 }
