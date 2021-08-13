@@ -1,18 +1,19 @@
-package com.ausy.sebastian;
+package com.ausy.sebastian.phonebook;
 
-import com.ausy.sebastian.controller.PhoneBook;
-import com.ausy.sebastian.controller.PhoneBookController;
+import com.ausy.sebastian.phonebook.controller.PhoneBook;
+import com.ausy.sebastian.phonebook.controller.PhoneBookImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         while (true) {
-            PhoneBook phoneBook = new PhoneBookController();
+            PhoneBook phoneBook = new PhoneBookImpl();
             int select;
             phoneBook.printMenu();
             select = sc.nextInt();

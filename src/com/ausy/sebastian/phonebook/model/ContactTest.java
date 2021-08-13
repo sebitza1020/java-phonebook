@@ -1,9 +1,10 @@
-package com.ausy.sebastian.model;
+package com.ausy.sebastian.phonebook.model;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 
 class ContactTest {
     static Contact contact = new Contact("0712 345 678", "John", "Smith", "john.smith@example.com",
