@@ -1,4 +1,4 @@
-package com.ausy.sebastian.phonebook.controller;
+package com.ausy.sebastian.phonebook.repository;
 
 
 import java.lang.reflect.InvocationTargetException;

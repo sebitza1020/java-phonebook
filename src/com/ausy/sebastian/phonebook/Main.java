@@ -1,6 +1,6 @@
 package com.ausy.sebastian.phonebook;
 
-import com.ausy.sebastian.phonebook.controller.PhoneBook;
+import com.ausy.sebastian.phonebook.repository.PhoneBook;
 import com.ausy.sebastian.phonebook.controller.PhoneBookImpl;
 
 import java.lang.reflect.InvocationTargetException;
