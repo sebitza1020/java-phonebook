@@ -28,6 +28,8 @@ You can take a look at the program above now, or you can watch this video by cli
 https://user-images.githubusercontent.com/61789114/129359003-b3f5760c-38fd-4c29-a2d4-3f7daa72b8c4.mp4
 
 <h3>Mentions: </h3>
+  
   Romanian phone pattern (w/o international preffix +40): ^07[1-9][0-9]\s\d{3}\s\d{3}$
+  
   
   In order to use your database with the program, you need to create a new database and a table in MySQL. Open "connection.properties" file and complete the following: database driver's name (e.g.: com.mysql.cj.jdbc.Driver for MySQL), url (database's url: jdbc:mysql://localhost:3308/tablename), username (MySQL username e.g.: root), and password (MySQL username's password).
